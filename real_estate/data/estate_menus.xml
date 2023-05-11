@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <menuitem id="test_menu_root" name="Test">
+    <menuitem id="test_menu_root" name="Real Estate">
         <menuitem id="property_first_level_menu" name="Advertisements">
             <menuitem id="property_menu_action" action="property_action" />
         </menuitem>
