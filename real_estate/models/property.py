@@ -35,3 +35,4 @@ class Property(models.Model):
         default = 'new'
     )
     active = fields.Boolean('Active',default=False)
+    property_type_id = fields.Many2one('property.type')
