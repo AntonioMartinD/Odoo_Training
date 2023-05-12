@@ -43,3 +43,4 @@ class Property(models.Model):
     
     buyer_id = fields.Many2one('res.partner', copy = False)
     tag_ids = fields.Many2many('property.tag')
+    offer_ids = fields.One2many('property.offer', 'property_id')
