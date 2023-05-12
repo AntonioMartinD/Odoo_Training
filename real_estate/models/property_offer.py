@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from odoo import api, exceptions, fields, models
+from odoo.exceptions import ValidationError
 
 
 class PropertyOffer(models.Model):
@@ -56,3 +57,13 @@ class PropertyOffer(models.Model):
         self.property_id.buyer_id = False
 
     _sql_constraints = [("check_price", "CHECK(price > 0)", "The price must be strictly bigger than 0")]
+
+    @api.model
+    def create(self, vals):
+        actual_property = self.env["property"].browse(vals["property_id"])
+        offers = actual_property.offer_ids
+        max_offer = max(offers.mapped("price"), default=0)
+        if vals["price"] < max_offer:
+            raise ValidationError(f"The offer must be higher than {max_offer}")
+        actual_property.state = "received"
+        return super().create(vals)

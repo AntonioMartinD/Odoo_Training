@@ -49,12 +49,12 @@
                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
                 <field name="bedrooms" />
                 <field name="living_area" />
-                <field name="expected_price" />
-                <field name="selling_price" />
+                <field name="expected_price" invisible="1" />
+                <field name="selling_price" invisible="1" />
                 <field name="date_availability" />
                 <field name="state" invisible="1" />
-                <field name="property_type_id" />
-                <field name="garden" />
+                <field name="property_type_id" invisible="1" />
+                <field name="garden" invisible="1" />
             </tree>
         </field>
     </record>
@@ -118,7 +118,6 @@
                                     <field name="garden_area" attrs="{'invisible': [('garden', '=', False)]}" />
                                     <field name="garden_orientation" />
                                     <field name="total_area" />
-
                                 </group>
                             </page>
                             <page string="Offers">
