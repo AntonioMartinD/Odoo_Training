@@ -12,7 +12,14 @@
     # any module necessary for this one to work correctly
     "depends": ["base"],
     # always loaded
-    "data": ["security/ir.model.access.csv", "views/property_views.xml", "views/property_type_views.xml", "views/property_tag_views.xml", "views/property_offer_views.xml" , "data/estate_menus.xml"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/property_views.xml",
+        "views/property_type_views.xml",
+        "views/property_tag_views.xml",
+        "views/property_offer_views.xml",
+        "data/estate_menus.xml",
+    ],
     # only loaded in demonstration mode
     "demo": [],
     "application": True,
