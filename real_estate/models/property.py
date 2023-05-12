@@ -1,5 +1,7 @@
 from datetime import timedelta
 from odoo import fields,models,api,exceptions
+from odoo.exceptions import ValidationError
+from odoo.tools.float_utils import float_compare
 
 class Property(models.Model):
     _name = "property"
@@ -87,3 +89,18 @@ class Property(models.Model):
                 raise exceptions.UserError("Property is already sold")
             record.state = 'sold'
         return True
+    
+    _sql_constraints = [
+        ('check_expected_price', 'CHECK(expected_price > 0)', 'The expected price must be strictly bigger than 0'),
+        ('check_selling_price', 'CHECK(selling_price > -1)', 'The selling price must be strictly bigger than 0')
+    ]
+
+    @api.constrains('selling_price')
+    def _check_selling_price(self):
+        for record in self:
+            if (record.selling_price > 0):
+                limit_price = record.expected_price * 0.9
+                compared_prices = float_compare(record.selling_price, limit_price, precision_digits = 2 )
+                if (compared_prices == -1):
+                    raise ValidationError("The selling price cannot be lower than 90'%' of the expected price")
+

@@ -53,3 +53,7 @@ class PropertyOffer(models.Model):
         self.status = 'refused'
         self.property_id.selling_price = 0
         self.property_id.buyer_id = False        
+
+    _sql_constraints = [
+        ('check_price', 'CHECK(price > 0)', 'The price must be strictly bigger than 0')
+    ]    
