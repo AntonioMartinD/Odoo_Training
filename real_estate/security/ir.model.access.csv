@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_real_estate_property,real_estate.property,model_property,base.group_user,1,1,1,1
 access_real_estate_property_type,real_estate.property_type,model_property_type,base.group_user,1,1,1,1
+access_real_estate_property_tag,real_estate.property_tag,model_property_tag,base.group_user,1,1,1,1
 

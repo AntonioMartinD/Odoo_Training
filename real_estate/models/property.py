@@ -36,3 +36,10 @@ class Property(models.Model):
     )
     active = fields.Boolean('Active',default=False)
     property_type_id = fields.Many2one('property.type')
+    salesperson_id = fields.Many2one('res.users', 
+                                     string="Salesperson", 
+                                     index=True, 
+                                     default=lambda self: self.env.user)
+    
+    buyer_id = fields.Many2one('res.partner', copy = False)
+    tag_ids = fields.Many2many('property.tag')
