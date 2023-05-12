@@ -1,5 +1,5 @@
 from datetime import timedelta
-from odoo import models,fields,api
+from odoo import models,fields,api,exceptions
 
 class PropertyOffer(models.Model):
     _name = "property.offer"
@@ -40,3 +40,16 @@ class PropertyOffer(models.Model):
         for record in self:
             record.date_deadline = fields.Date.today() + timedelta(days = record.validity)
 
+    def action_accept(self):
+        accepted_offer = self.property_id.offer_ids.filtered(lambda element : element.status == 'accepted')
+        if (accepted_offer):
+            raise exceptions.UserError("More than one offer can't be accepted")
+        self.status = 'accepted'
+        self.property_id.state = 'acepted'
+        self.property_id.selling_price = self.price
+        self.property_id.buyer_id = self.partner_id
+
+    def action_refuse(self):
+        self.status = 'refused'
+        self.property_id.selling_price = 0
+        self.property_id.buyer_id = False        
