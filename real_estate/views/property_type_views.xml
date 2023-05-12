@@ -1,8 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <record id="property_type_action" model="ir.actions.act_window">
         <field name="name">Property Types</field>
         <field name="res_model">property.type</field>
         <field name="view_mode">tree,form</field>
+    </record>
+    <record id="property_type_view_tree" model="ir.ui.view">
+        <field name="name">property.type.tree</field>
+        <field name="model">property.type</field>
+        <field name="arch" type="xml">
+            <tree string="Properties">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="property_ids" />
+            </tree>
+        </field>
+    </record>
+    <record id="property_type_view_form" model="ir.ui.view">
+        <field name="name">property.type.form</field>
+        <field name="model">property.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header class="o_not_full oe_button_box" align="right">
+                        <button class="btn oe_stat_button" type="object" name="get_offers">
+                            <i class="fa fa-fw o_button_icon fa-money" />
+                            <div class="o_fielld_widget o_stat_info o_readonly_modifier">
+                                <span class="o_stat_value">
+                                    <field name="offer_count" />
+                                </span>
+                                <span class="o_stat_text"> Offers</span>
+                            </div>
+                        </button>
+                    </header>
+                    <div>
+                        <h1>
+                            <field name="name" placeholder="Title" />
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page name='Properties'>
+                            <field name='property_ids' widget="one2many_list">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="expected_price" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
     </record>
 </odoo>
