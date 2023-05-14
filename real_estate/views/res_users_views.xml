@@ -12,7 +12,7 @@
                         widget="one2many_list"
                         domain="[('state', 'in', ['new','received'])]"
                     >
-                            <tree editable="false" decoration-success="true">
+                            <tree editable="false">
                                 <field name="name" />
                                 <field name="property_type_id" />
                                 <field name="postcode" />
