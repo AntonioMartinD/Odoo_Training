@@ -3,7 +3,7 @@
     <record id="property_action" model="ir.actions.act_window">
         <field name="name">Properties</field>
         <field name="res_model">property</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,kanban</field>
         <field name="context">{'search_default_available': 1} </field>
     </record>
     <record id="property_search" model="ir.ui.view">
@@ -69,14 +69,14 @@
                         type='object'
                         string='Sold'
                         class="grid_arrow_range btn btn-secondary"
-                        states='new, acepted, canceled'
+                        attrs="{'invisible': [('state', 'in', ['sold','canceled'])]}"
                     />
                     <button
                         name='action_cancel'
                         type='object'
                         string='Cancel'
                         class="grid_arrow_range btn btn-secondary"
-                        states='new, acepted, canceled'
+                        attrs="{'invisible': [('state', 'in', ['sold','canceled'])]}"
                     />
                     <field name="state" widget="statusbar" statusbar_visible="new, acepted, received, sold" />
                 </header>
@@ -161,6 +161,38 @@
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+    <record id="property_kanban_view" model="ir.ui.view">
+        <field name="name">property.kanban</field>
+        <field name="model">property</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="property_type_id" records_draggable="false">
+                <field name="state" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <h4>
+                                <field name="name" />
+                            </h4>
+                            <div> Expected price: <field name="expected_price" />
+                            </div>
+                            <div t-if="record.state.raw_value == 'received'"> Best offer: <field name="best_price" />
+                            </div>
+                            <div t-if="record.state.raw_value == 'acepted'"> Selling price: <field
+                                    name="selling_price"
+                                />
+                            </div>
+                            <field
+                                name="tag_ids"
+                                widget="many2many_tags"
+                                options="{'color_field': 'color'}"
+                                editable="false"
+                            />
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 </odoo>

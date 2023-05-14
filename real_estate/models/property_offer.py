@@ -67,3 +67,6 @@ class PropertyOffer(models.Model):
             raise ValidationError(f"The offer must be higher than {max_offer}")
         actual_property.state = "received"
         return super().create(vals)
+
+    def get_accepted_offer(self):
+        return self.property_id.offer_ids.filtered(lambda element: element.status == "accepted")
