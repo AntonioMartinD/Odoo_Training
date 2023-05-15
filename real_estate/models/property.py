@@ -40,7 +40,7 @@ class Property(models.Model):
         copy=False,
         default="new",
     )
-    active = fields.Boolean("Active", default=False)
+    active = fields.Boolean("Active", default=True)
     property_type_id = fields.Many2one("property.type")
     salesperson_id = fields.Many2one("res.users", string="Salesperson", index=True, default=lambda self: self.env.user)
 
