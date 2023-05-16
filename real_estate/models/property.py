@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from odoo import api, exceptions, fields, models
+from odoo import _, api, exceptions, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools.float_utils import float_compare
 
@@ -11,21 +11,20 @@ class Property(models.Model):
     _order = "id desc"
 
     name = fields.Char("Title", required=True)
-    description = fields.Text("Description")
-    postcode = fields.Char("Postcode")
+    description = fields.Text()
+    postcode = fields.Char()
     date_availability = fields.Date(
         "Available From", default=lambda self: fields.Datetime.now() + timedelta(days=90), copy=False
     )
-    expected_price = fields.Float("Expected Price", required=True)
-    selling_price = fields.Float("Selling Price", readonly=True)
+    expected_price = fields.Float(required=True)
+    selling_price = fields.Float(readonly=True)
     bedrooms = fields.Integer("Bedrooms", default=2)
     living_area = fields.Integer("Living Area (sqm)")
-    facades = fields.Integer("Facades")
-    garage = fields.Boolean("Garage")
-    garden = fields.Boolean("Garden")
+    facades = fields.Integer()
+    garage = fields.Boolean()
+    garden = fields.Boolean()
     garden_area = fields.Integer("Garden Area (sqm)")
     garden_orientation = fields.Selection(
-        string="Garden Orientation",
         selection=[("north", "North"), ("south", "South"), ("east", "East"), ("weast", "Weast")],
     )
     state = fields.Selection(
@@ -40,7 +39,7 @@ class Property(models.Model):
         copy=False,
         default="new",
     )
-    active = fields.Boolean("Active", default=True)
+    active = fields.Boolean(default=True)
     property_type_id = fields.Many2one("property.type")
     salesperson_id = fields.Many2one("res.users", string="Salesperson", index=True, default=lambda self: self.env.user)
 
@@ -76,18 +75,18 @@ class Property(models.Model):
     def action_cancel(self):
         for record in self:
             if record.state == "sold":
-                raise exceptions.UserError("Sold property cannot be canceled")
+                raise exceptions.UserError(_("Sold property cannot be canceled"))
             elif record.state == "canceled":
-                raise exceptions.UserError("Property is already canceled")
+                raise exceptions.UserError(_("Property is already canceled"))
             record.state = "canceled"
         return True
 
     def action_sold(self):
         for record in self:
             if record.state == "canceled":
-                raise exceptions.UserError("Canceled property cannot be sold")
+                raise exceptions.UserError(_("Canceled property cannot be sold"))
             elif record.state == "sold":
-                raise exceptions.UserError("Property is already sold")
+                raise exceptions.UserError(_("Property is already sold"))
             record.state = "sold"
         return True
 
@@ -103,10 +102,10 @@ class Property(models.Model):
                 limit_price = record.expected_price * 0.9
                 compared_prices = float_compare(record.selling_price, limit_price, precision_digits=2)
                 if compared_prices == -1:
-                    raise ValidationError("The selling price cannot be lower than 90'%' of the expected price")
+                    raise ValidationError(_("The selling price cannot be lower than 90'%' of the expected price"))
 
     @api.ondelete(at_uninstall=False)
     def unlink(self):
         for record in self:
             if record.state not in ["new", "canceled"]:
-                raise exceptions.UserError("Only new and canceled properties can be deleted")
+                raise exceptions.UserError(_("Only new and canceled properties can be deleted"))
