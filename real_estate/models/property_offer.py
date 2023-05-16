@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from odoo import api, exceptions, fields, models
+from odoo import _, api, exceptions, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -43,18 +43,20 @@ class PropertyOffer(models.Model):
             record.date_deadline = fields.Date.today() + timedelta(days=record.validity)
 
     def action_accept(self):
-        accepted_offer = self.property_id.offer_ids.filtered(lambda element: element.status == "accepted")
-        if accepted_offer:
-            raise exceptions.UserError("More than one offer can't be accepted")
-        self.status = "accepted"
-        self.property_id.state = "acepted"
-        self.property_id.selling_price = self.price
-        self.property_id.buyer_id = self.partner_id
+        for record in self:
+            accepted_offer = record.property_id.offer_ids.filtered(lambda element: element.status == "accepted")
+            if accepted_offer:
+                raise exceptions.UserError(_("More than one offer can't be accepted"))
+            record.status = "accepted"
+            record.property_id.state = "acepted"
+            record.property_id.selling_price = record.price
+            record.property_id.buyer_id = record.partner_id
 
     def action_refuse(self):
-        self.status = "refused"
-        self.property_id.selling_price = 0
-        self.property_id.buyer_id = False
+        for record in self:
+            record.status = "refused"
+            record.property_id.selling_price = 0
+            record.property_id.buyer_id = False
 
     _sql_constraints = [("check_price", "CHECK(price > 0)", "The price must be strictly bigger than 0")]
 
@@ -64,7 +66,7 @@ class PropertyOffer(models.Model):
         offers = actual_property.offer_ids
         max_offer = max(offers.mapped("price"), default=0)
         if vals["price"] < max_offer:
-            raise ValidationError(f"The offer must be higher than {max_offer}")
+            raise ValidationError(_("The offer must be higher than %f", max_offer))
         actual_property.state = "received"
         return super().create(vals)
 
