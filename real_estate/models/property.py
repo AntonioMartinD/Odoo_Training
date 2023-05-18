@@ -18,7 +18,7 @@ class Property(models.Model):
     )
     expected_price = fields.Float(required=True)
     selling_price = fields.Float(readonly=True)
-    bedrooms = fields.Integer("Bedrooms", default=2)
+    bedrooms = fields.Integer(default=2)
     living_area = fields.Integer("Living Area (sqm)")
     facades = fields.Integer()
     garage = fields.Boolean()
@@ -76,7 +76,7 @@ class Property(models.Model):
         for record in self:
             if record.state == "sold":
                 raise exceptions.UserError(_("Sold property cannot be canceled"))
-            elif record.state == "canceled":
+            if record.state == "canceled":
                 raise exceptions.UserError(_("Property is already canceled"))
             record.state = "canceled"
         return True
@@ -85,7 +85,7 @@ class Property(models.Model):
         for record in self:
             if record.state == "canceled":
                 raise exceptions.UserError(_("Canceled property cannot be sold"))
-            elif record.state == "sold":
+            if record.state == "sold":
                 raise exceptions.UserError(_("Property is already sold"))
             record.state = "sold"
         return True
