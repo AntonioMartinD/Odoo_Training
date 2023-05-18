@@ -9,16 +9,12 @@ class PropertyOffer(models.Model):
     _description = "Estate Property Offer Model"
     _order = "price desc"
 
-    price = fields.Float("Price")
-    status = fields.Selection(
-        string="Status", selection=[("accepted", "Accepted"), ("refused", "Refused")], copy=False
-    )
+    price = fields.Float()
+    status = fields.Selection(selection=[("accepted", "Accepted"), ("refused", "Refused")], copy=False)
     partner_id = fields.Many2one("res.partner", required=True)
     property_id = fields.Many2one("property", required=True)
-    validity = fields.Integer(compute="_compute_validity", inverse="_inverse_validity", string="Validity", default=7)
-    date_deadline = fields.Date(
-        compute="_compute_date_deadline", inverse="_inverse_date_deadline", string="Date Deadline"
-    )
+    validity = fields.Integer(compute="_compute_validity", inverse="_inverse_validity", default=7)
+    date_deadline = fields.Date(compute="_compute_date_deadline", inverse="_inverse_date_deadline")
     property_type_id = fields.Many2one("property.type", related="property_id.property_type_id", store="True")
 
     @api.depends("validity")
