@@ -4,11 +4,12 @@
     "description": "The real state module is create base on the Odoo 16.0 documentation",
     "author": "Vauxoo",
     "license": "LGPL-3",
-    "category": "Uncategorized",
+    "category": "Real Estate/Brokerage",
     "version": "16.0.1.0.0",
     "depends": ["base"],
     "data": [
         "security/ir.model.access.csv",
+        "security/security.xml",
         "data/estate_menus.xml",
         "views/property_views.xml",
         "views/property_type_views.xml",
