@@ -61,6 +61,8 @@ class PropertyOffer(models.Model):
         actual_property = self.env["property"].browse(vals["property_id"])
         offers = actual_property.offer_ids
         max_offer = max(offers.mapped("price"), default=0)
+        if actual_property.state == "sold":
+            raise ValidationError(_("You can't add an offer to a sold property"))
         if vals["price"] < max_offer:
             raise ValidationError(_("The offer must be higher than %f", max_offer))
         actual_property.state = "received"

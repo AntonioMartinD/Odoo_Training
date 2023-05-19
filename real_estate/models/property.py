@@ -83,6 +83,9 @@ class Property(models.Model):
 
     def action_sold(self):
         for record in self:
+            has_accepted_offer = any(offer.status == "accepted" for offer in record.offer_ids)
+            if not has_accepted_offer:
+                raise exceptions.UserError(_("Property cannot be sold without any accepted offers"))
             if record.state == "canceled":
                 raise exceptions.UserError(_("Canceled property cannot be sold"))
             if record.state == "sold":
