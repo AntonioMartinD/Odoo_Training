@@ -25,7 +25,7 @@ class Property(models.Model):
                 Command.create({
                     'name': 'Sales Commission',
                     'quantity': 1,
-                '   price_unit': record.selling_price * 0.06,
+                    'price_unit': record.selling_price * 0.06,
                 })
             ]
             })
