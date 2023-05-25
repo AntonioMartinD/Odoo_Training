@@ -25,9 +25,7 @@
                                 <strong>!!!Invoice has already been created!!!</strong>
                             </p>
                         </div>
-                        <t t-if="property.offer_ids">
-                            <t t-call="real_estate.report_property_offers_table_template" />
-                        </t>
+                        <t t-if="property.offer_ids" t-call="real_estate.report_property_offers_table_template" />
                         <p t-else="">No offers yet for this property.</p>
                     </div>
                 </t>
